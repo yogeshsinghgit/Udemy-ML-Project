@@ -7,6 +7,9 @@ from dataclasses import dataclass
 from src.exception import CustomException
 from sklearn.model_selection import train_test_split
 
+from src.components.data_transformation import DataTransformation
+from src.components.data_transformation import DataTransformationConfig
+
 # stores the file path for input to another files
 
 @dataclass
@@ -25,6 +28,7 @@ class DataIngestion:
         reads data from databases or any file path
         '''
         logging.info("Data Ingestion Method Running")
+        
         try:
             df = pd.read_csv('notebook\data\stud.csv')
             logging.info("Dataset is readed as dataframe")
@@ -43,8 +47,7 @@ class DataIngestion:
 
             return (
                 self.ingestion_config.train_data_path,
-                self.ingestion_config.test_data_path,
-                self.ingestion_config.raw_data_path
+                self.ingestion_config.test_data_path
             )
 
         except Exception as e:
@@ -52,6 +55,10 @@ class DataIngestion:
 
 if __name__ == "__main__":
     obj = DataIngestion()
-    obj.initiate_data_ingestion()
+    train_data, test_data  = obj.initiate_data_ingestion()
+    
+    # data transformation code
+    data_transformation = DataTransformation()
+    data_transformation.initiate_data_transformation(train_data, test_data)
 
 
